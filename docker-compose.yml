@@ -1,3 +1,12 @@
+x-api-environment: &api-environment
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+  USE_MINIO: ${USE_MINIO:-1}
+  WEB_URL: ${WEB_URL:-http://localhost}
+  APP_BASE_URL: ${APP_BASE_URL:-http://localhost}
+  ADMIN_BASE_URL: ${ADMIN_BASE_URL:-http://localhost}
+  SPACE_BASE_URL: ${SPACE_BASE_URL:-http://localhost}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost}
+
 services:
   web:
     container_name: web
@@ -45,9 +54,7 @@ services:
     command: ./bin/docker-entrypoint-api.sh
     env_file:
       - ./apps/api/.env
-    environment:
-      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
-      USE_MINIO: ${USE_MINIO:-1}
+    environment: *api-environment
     depends_on:
       - plane-db
       - plane-redis
@@ -63,9 +70,7 @@ services:
     command: ./bin/docker-entrypoint-worker.sh
     env_file:
       - ./apps/api/.env
-    environment:
-      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
-      USE_MINIO: ${USE_MINIO:-1}
+    environment: *api-environment
     depends_on:
       - api
       - plane-db
@@ -82,9 +87,7 @@ services:
     command: ./bin/docker-entrypoint-beat.sh
     env_file:
       - ./apps/api/.env
-    environment:
-      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
-      USE_MINIO: ${USE_MINIO:-1}
+    environment: *api-environment
     depends_on:
       - api
       - plane-db
@@ -101,9 +104,7 @@ services:
     command: ./bin/docker-entrypoint-migrator.sh
     env_file:
       - ./apps/api/.env
-    environment:
-      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
-      USE_MINIO: ${USE_MINIO:-1}
+    environment: *api-environment
     depends_on:
       - plane-db
       - plane-redis
