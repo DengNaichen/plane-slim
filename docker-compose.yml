@@ -59,6 +59,30 @@ services:
       - plane-db
       - plane-redis
 
+  mcp:
+    container_name: plane-mcp
+    image: plane-slim-mcp:local
+    build:
+      context: ./apps/mcp
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      MCP_TRANSPORT: http
+      MCP_ADDR: :8080
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN}
+      PLANE_BASE_URL: http://api:8000
+      PLANE_SESSION_ID: ${PLANE_SESSION_ID:-not-configured}
+      PLANE_SESSION_COOKIE_NAME: ${PLANE_SESSION_COOKIE_NAME:-session-id}
+      PLANE_WORKSPACE: ${PLANE_WORKSPACE:-mcp-lab}
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
   worker:
     container_name: bgworker
     build:
@@ -178,6 +202,7 @@ services:
       - api
       - space
       - admin
+      - mcp
 
 volumes:
   pgdata:

@@ -1,0 +1,39 @@
+services:
+  web:
+    image: plane-slim-web:local
+
+  admin:
+    image: plane-slim-admin:local
+
+  space:
+    image: plane-slim-space:local
+
+  api:
+    image: plane-slim-api:local
+
+  worker:
+    image: plane-slim-api:local
+
+  beat-worker:
+    image: plane-slim-api:local
+
+  migrator:
+    image: plane-slim-api:local
+
+  mcp:
+    image: plane-slim-mcp:local
+
+  proxy:
+    image: plane-slim-proxy:local
+
+  plane-redis:
+    image: redis:7.2
+
+  plane-db:
+    image: plane-slim-postgres:local
+
+  plane-mq:
+    image: plane-slim-rabbitmq:local
+
+  plane-minio:
+    image: quay.io/minio/minio:RELEASE.2024-11-07T00-52-20Z
